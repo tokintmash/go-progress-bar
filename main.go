@@ -3,34 +3,31 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 )
 
-func progressBar(filenum, totalLenth int) {
-	length := 50
-	perc_done := (filenum+1)*100/totalLenth
-	bars := perc_done * length / 100
+func progressBar(fileNum, totalLenth int) {
+	barLength := 50                               // set the max length of the bar on the sceen
+	perc_done := (fileNum + 1) * 100 / totalLenth // percentage done
+	bars := perc_done * barLength / 100           // actual bars number
 
-	var progressBar string = "["
-	fmt.Print("\033[s")
-	for i := 0; i < bars; i++ {
-		progressBar += "#"
-		fmt.Printf("%v",progressBar)
-		// progressBar += fmt.Sprintf("%v %v %%", progressBar, perc_done)
+	var bar string = "["
+
+	// write actual number of bars according to the current iteration
+	for range bars {
+		bar += "#"
 	}
-	fmt.Print("\033[u\033[K")
-	// fmt.Printf("%v] %v %%\n", progressBar, (filenum+1)*100/totalLenth)
-	// time.Sleep(1 * time.Millisecond)
+
+	fmt.Print("\033[u\033[K") // set cursor back to original location
+	fmt.Printf("%v] %v/%v (%v%%)\n", bar, fileNum+1, totalLenth, perc_done)
+	time.Sleep(1 * time.Millisecond) // simulate work
 }
 
 func main() {
-	files, _ := os.ReadDir("files")
+	files, _ := os.ReadDir("files") // get the contents of the folder
+	fmt.Print("\033[s")             // get current curson position
+	// range over contents and call the progressBar() per each element
 	for file := range files {
 		progressBar(file, len(files))
 	}
-	// for i := range files {
-	// 	fmt.Print("\033[u\033[K")
-	// 	progressBar += "#"
-	// 	fmt.Printf("%v] %v %%\n", progressBar, (i+1)*100/len(files))
-	// 	time.Sleep(1 * time.Millisecond)
-	// }
 }
