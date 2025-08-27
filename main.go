@@ -20,7 +20,7 @@ func progressBar(fileNum, totalLenth int) {
 
 	fmt.Print("\033[u\033[K") // set cursor back to original location
 	fmt.Printf("%v] %v/%v (%v%%)\n", bar, fileNum+1, totalLenth, perc_done)
-	time.Sleep(1 * time.Millisecond) // simulate work
+	time.Sleep(1 * time.Millisecond) // simulate work for demo
 }
 
 func main() {
@@ -28,6 +28,6 @@ func main() {
 	fmt.Print("\033[s")             // get current curson position
 	// range over contents and call the progressBar() per each element
 	for file := range files {
-		progressBar(file, len(files))
+		progressBar(file, len(files)) // draws and animates the bar
 	}
 }
